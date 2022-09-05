@@ -1,0 +1,7 @@
+from django.core.validators import ValidationError
+
+
+def only_letters_validator(value):
+    for ch in value:
+        if not ch.isalpha():
+            raise ValidationError('Value must contain only letters')

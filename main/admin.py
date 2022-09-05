@@ -1,3 +1,14 @@
 from django.contrib import admin
 
-# Register your models here.
+# Register your models here
+from main.models import Profile, Pet
+
+
+@admin.register(Profile)
+class ProfileAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Pet)
+class PetAdmin(admin.ModelAdmin):
+    pass
