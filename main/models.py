@@ -1,7 +1,4 @@
-import datetime
-
-
-from django.contrib.auth import get_user_model
+from cloudinary import models as cloudinary_models
 from django.core.validators import MinLengthValidator
 from django.db import models
 from django.db.models import Model
@@ -92,4 +89,23 @@ class Pet(models.Model):
 
     class Meta:
         unique_together = ('user', 'name')
+
+
+class PetPhoto(models.Model):
+    photo = cloudinary_models.CloudinaryField('image')
+    description = models.TextField(
+        null=True,
+        blank=True,
+    )
+
+    publication_date = models.DateTimeField(auto_now_add=True,)
+
+    likes = models.IntegerField(default=0,)
+
+    tagged_pets = models.ManyToManyField(Pet,) # validate at least 1 pet
+
+    user = models.ForeignKey(
+        Profile,
+        on_delete=models.CASCADE,
+    )
 
