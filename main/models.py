@@ -1,10 +1,14 @@
+import datetime
+
 from cloudinary import models as cloudinary_models
+from django.contrib.auth import get_user_model
 from django.core.validators import MinLengthValidator
 from django.db import models
 from django.db.models import Model
 
 from main.validators import only_letters_validator
 
+UserModel = get_user_model()
 
 class Profile(models.Model):
     FIRST_NAME_MIN_LENGTH = 2
@@ -87,6 +91,10 @@ class Pet(models.Model):
         on_delete=models.CASCADE,
     )
 
+    @property
+    def age(self):
+        return datetime.datetime.now().year - self.date_of_birth.year
+
     class Meta:
         unique_together = ('user', 'name')
 
@@ -105,7 +113,7 @@ class PetPhoto(models.Model):
     tagged_pets = models.ManyToManyField(Pet,) # validate at least 1 pet
 
     user = models.ForeignKey(
-        Profile,
+        UserModel,
         on_delete=models.CASCADE,
     )
 
