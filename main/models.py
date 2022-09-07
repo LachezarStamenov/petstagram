@@ -8,7 +8,7 @@ from django.db.models import Model
 
 from main.validators import only_letters_validator
 
-UserModel = get_user_model()
+# UserModel = get_user_model()
 
 class Profile(models.Model):
     FIRST_NAME_MIN_LENGTH = 2
@@ -86,7 +86,7 @@ class Pet(models.Model):
     # One-to-one relations
 
     # One-to-many relations
-    user = models.ForeignKey(
+    user_profile = models.ForeignKey(
         Profile,
         on_delete=models.CASCADE,
     )
@@ -96,11 +96,15 @@ class Pet(models.Model):
         return datetime.datetime.now().year - self.date_of_birth.year
 
     class Meta:
-        unique_together = ('user', 'name')
+        unique_together = ('user_profile', 'name')
 
 
 class PetPhoto(models.Model):
-    photo = cloudinary_models.CloudinaryField('image')
+    photo = models.ImageField(
+        validators=(
+
+        )
+    )
     description = models.TextField(
         null=True,
         blank=True,
@@ -112,8 +116,8 @@ class PetPhoto(models.Model):
 
     tagged_pets = models.ManyToManyField(Pet,) # validate at least 1 pet
 
-    user = models.ForeignKey(
-        UserModel,
-        on_delete=models.CASCADE,
-    )
+    # user = models.ForeignKey(
+    #     Profile,
+    #     on_delete=models.CASCADE,
+    # )
 

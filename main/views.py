@@ -19,7 +19,7 @@ def show_home(request):
 
 def show_dashboard(request):
     profile = get_profile()
-    pet_photos = PetPhoto.objects.filter(tagged_pets__user=profile)
+    pet_photos = set(PetPhoto.objects.filter(tagged_pets__user_profile=profile))
     context = {
         'pet_photos': pet_photos,
     }

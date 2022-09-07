@@ -6,5 +6,5 @@ urlpatterns = (
     path('', show_home, name='index'),
     path('dashboard/', show_dashboard, name='dashboard'),
     path('profile/', show_profile, name='profile'),
-    path('photo/details/<int:pk>/', show_pet_photo_details, name='pet_photo_details'),
+    path('photo/details/<int:pk>/', show_pet_photo_details, name='pet photo details'),
 )
