@@ -21,9 +21,9 @@
             <!-- Description -->
             <p class="mt-2">{{ pet.description }}</p>
             <!-- Likes Button -->
-            <a href="#"><i class="fa fa-heart-o" aria-hidden="true"></i></a>
+            <a href="{% url 'like pet photo' pet_photo.id %}"><i class="fa fa-heart-o" aria-hidden="true"></i></a>
             <!-- Likes Counter -->
-            <p class="mt-2">Likes: 21</p>
+            <p class="mt-2">Likes: {{ pet_photo.likes }}</p>
             <!-- Buttons -->
             <a href="#" class="btn btn-primary">Edit</a>
             <a href="#" class="btn btn-danger">Delete</a>

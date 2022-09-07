@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from main.models import Profile, PetPhoto
 
@@ -36,3 +36,11 @@ def show_pet_photo_details(request, pk):
         'pet_photo': pet_photo,
     }
     return render(request, 'photo_details.html', context)
+
+
+def like_pet_photo(request, pk):
+    # like the pet photo with pk
+    pet_photo = PetPhoto.objects.get(pk=pk)
+    pet_photo.likes += 1
+    pet_photo.save()
+    return redirect('pet photo details', pk)
