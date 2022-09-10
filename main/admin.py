@@ -2,7 +2,6 @@ from django.contrib import admin
 from main.models import Profile, Pet, PetPhoto
 
 
-
 # create a mixed form for filling in admin portal admin
 class PetInlineAdmin(admin.StackedInline):
     model = Pet
