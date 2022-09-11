@@ -1,5 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
+from main.forms import ProfileForm
 from main.helpers import get_profile
 from main.models import Pet, PetPhoto
 
@@ -22,7 +23,18 @@ def show_profile(request):
 
 
 def create_profile(request):
-    return render(request, 'profile_create.html')
+    if request.method == 'POST':
+        form = ProfileForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('index')
+    else:
+        form = ProfileForm()
+    context = {
+        'form': form,
+    }
+
+    return render(request, 'profile_create.html', context)
 
 
 def edit_profile(request):
