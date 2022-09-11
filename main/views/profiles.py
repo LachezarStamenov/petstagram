@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 
 from main.forms import CreateProfileForm, EditProfileForm
 from main.helpers import get_profile
-from main.models import Pet, PetPhoto
+from main.models import Pet, PetPhoto, Profile
 
 
 def show_profile(request):
@@ -22,34 +22,56 @@ def show_profile(request):
     return render(request, 'profile_details.html', context)
 
 
-def create_profile(request):
+def profile_action(request, form_class, success_url, instance, template_name):
     if request.method == 'POST':
-        form = CreateProfileForm(request.POST)
+        form = form_class(request.POST, instance=instance)
         if form.is_valid():
             form.save()
-            return redirect('index')
+            return redirect(success_url)
     else:
-        form = CreateProfileForm()
+        form = form_class(instance=instance)
     context = {
         'form': form,
     }
 
-    return render(request, 'profile_create.html', context)
+    return render(request, template_name, context)
+
+
+def create_profile(request):
+    return profile_action(request, CreateProfileForm, 'index', Profile(), 'profile_create.html')
 
 
 def edit_profile(request):
-    profile = get_profile()
-    if request.method == 'POST':
-        form = EditProfileForm(request.POST, instance=profile)
-        if form.is_valid():
-            form.save()
-            return redirect('profile details')
-    else:
-        form = EditProfileForm(instance=profile)
-    context = {
-        'form': form,
-    }
-    return render(request, 'profile_edit.html', context)
+    return profile_action(request, EditProfileForm, 'profile details', get_profile(), 'profile_edit.html')
+
+# def create_profile(request):
+#     if request.method == 'POST':
+#         form = CreateProfileForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('index')
+#     else:
+#         form = CreateProfileForm()
+#     context = {
+#         'form': form,
+#     }
+#
+#     return render(request, 'profile_create.html', context)
+#
+#
+# def edit_profile(request):
+#     profile = get_profile()
+#     if request.method == 'POST':
+#         form = EditProfileForm(request.POST, instance=profile)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('profile details')
+#     else:
+#         form = EditProfileForm(instance=profile)
+#     context = {
+#         'form': form,
+#     }
+#     return render(request, 'profile_edit.html', context)
 
 
 def delete_profile(request):

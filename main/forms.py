@@ -67,9 +67,9 @@ class EditProfileForm(BootstrapFormMixin, forms.ModelForm):
                     'rows': 3,
                 }
             ),
-            # 'date_of_birth': forms.DateInput(
-            #     attrs={
-            #         'min': '1920'
-            #     }
-            # ),
+            'date_of_birth': forms.DateInput(
+                attrs={
+                    'min': '1920'
+                }
+            ),
         }
