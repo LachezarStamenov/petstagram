@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 
-from main.forms import ProfileForm
+from main.forms import CreateProfileForm, EditProfileForm
 from main.helpers import get_profile
 from main.models import Pet, PetPhoto
 
@@ -24,12 +24,12 @@ def show_profile(request):
 
 def create_profile(request):
     if request.method == 'POST':
-        form = ProfileForm(request.POST)
+        form = CreateProfileForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect('index')
     else:
-        form = ProfileForm()
+        form = CreateProfileForm()
     context = {
         'form': form,
     }
@@ -38,7 +38,18 @@ def create_profile(request):
 
 
 def edit_profile(request):
-    return render(request, 'profile_edit.html')
+    profile = get_profile()
+    if request.method == 'POST':
+        form = EditProfileForm(request.POST, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect('profile details')
+    else:
+        form = EditProfileForm(instance=profile)
+    context = {
+        'form': form,
+    }
+    return render(request, 'profile_edit.html', context)
 
 
 def delete_profile(request):
