@@ -1,7 +1,7 @@
 from django import forms
 
 from main.helpers import BootstrapFormMixin
-from main.models import Profile
+from main.models import Profile, PetPhoto, Pet
 
 
 class CreateProfileForm(BootstrapFormMixin, forms.ModelForm):
@@ -76,7 +76,44 @@ class EditProfileForm(BootstrapFormMixin, forms.ModelForm):
 
 
 class DeleteProfileForm(forms.ModelForm):
+    def save(self, commit=True):
+
+        # need to delete all pets and photos with deleting the user
+        pets = list(self.instance.pet_set.all())
+        PetPhoto.objects.filter(tagged_pets__in=pets).delete()
+        self.instance.delete()
+
+        return self.instance
+
     class Meta:
         model = Profile
         fields = ()
+
+
+class CreatePetForm(BootstrapFormMixin, forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._init_bootstrap_form_controls()
+
+    class Meta:
+        model = Pet
+        fields = ('name', 'type', 'date_of_birth')
+        widgets = {
+            'name': forms.TextInput(
+                attrs={
+                    'placeholder': 'Enter pet name'
+                }
+              ),
+        }
+
+
+class EditPetForm(BootstrapFormMixin, forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._init_bootstrap_form_controls()
+
+    class Meta:
+        model = Pet
+        exclude = ('user_profile',)
+
 
