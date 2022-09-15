@@ -1,6 +1,6 @@
 from django import forms
 
-from main.helpers import BootstrapFormMixin
+from main.helpers import BootstrapFormMixin, DisabledFieldsFormMixin
 from main.models import Profile, PetPhoto, Pet
 
 
@@ -111,6 +111,22 @@ class EditPetForm(BootstrapFormMixin, forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._init_bootstrap_form_controls()
+
+    class Meta:
+        model = Pet
+        exclude = ('user_profile',)
+
+
+class DeletePetForm(BootstrapFormMixin, DisabledFieldsFormMixin, forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._init_bootstrap_form_controls()
+        self._init_disabled_fields()
+
+    def save(self, commit=True):
+        self.instance.delete()
+        return self.instance
 
     class Meta:
         model = Pet

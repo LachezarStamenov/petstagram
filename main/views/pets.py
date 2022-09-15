@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 
-from main.forms import CreatePetForm, EditPetForm
+from main.forms import CreatePetForm, EditPetForm, DeletePetForm
 from main.helpers import get_profile
 from main.models import Pet
 
@@ -30,4 +30,4 @@ def edit_pet(request, pk):
 
 
 def delete_pet(request, pk):
-    return render(request, 'pet_delete.html')
+    return pet_action(request, DeletePetForm, 'profile details', Pet.objects.get(pk=pk), 'pet_delete.html')
